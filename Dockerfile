@@ -1,6 +1,6 @@
 FROM python:3.10-slim
 
-# System deps needed by Pillow / TensorFlow
+# System dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libgl1 \
     libglib2.0-0 \
@@ -14,13 +14,12 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-# Override at runtime with: docker run -e MODEL_PATH=/path/to/model.h5 ...
 ENV MODEL_PATH=models/plant_disease_model.h5
 
 EXPOSE 8501
 
-HEALTHCHECK CMD curl --fail http://localhost:8501/_stcore/health || exit 1
+HEALTHCHECK CMD curl --fail http://localhost:${PORT:-8501}/_stcore/health || exit 1
 
-ENTRYPOINT ["streamlit", "run", "app.py", \
-    "--server.port=8501", \
-    "--server.address=0.0.0.0"]
+CMD streamlit run app.py \
+    --server.port=${PORT:-8501} \
+    --server.address=0.0.0.0
