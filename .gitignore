@@ -1,0 +1,9 @@
+__pycache__/
+*.pyc
+.venv/
+venv/
+.streamlit/secrets.toml
+
+# Trained model is large — keep it out of git history.
+# Use Git LFS or an external download step in deployment instead.
+models/*.h5
